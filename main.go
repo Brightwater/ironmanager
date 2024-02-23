@@ -1,15 +1,21 @@
 package main
 
-import groupiron "ironmanager/groupIron"
-
-// var apiKey string = "MTA4ODk5NDcxNzUwMjU1ODM0OA.G_u5ak.ApFKSCggejECI268Ru61ntMtvhGKOVN6bPl0w4"
+import (
+	"log"
+	"github.com/Brightwater/ironmanager/groupIron"
+)
 
 func main() {
 	// groupiron.CallApi()
+	config, err := LoadConfig()
+	if err != nil {
+		log.Fatal("Couldn't load config", err)
+	}
+	client := groupIron.NewApiClient(config.GROUP_IRON_BASE_URL+"/get-group-data?from_time=1980-12-23T03:57:02.960Z", config.GROUP_IRON_TOKEN)
 	players := groupIron.GetAllPlayersCurrentStatus(client)
 	if players == nil {
 		panic("Failed to get group players")
 	}
-	groupiron.GetPlayerCurrentStats(players, "BB Bright")
+	groupIron.GetPlayerCurrentStats(players, "BB Bright")
 
 }

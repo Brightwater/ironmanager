@@ -1,4 +1,4 @@
-package groupiron
+package groupIron
 
 import (
 	"encoding/json"
