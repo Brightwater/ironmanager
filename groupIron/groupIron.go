@@ -2,6 +2,7 @@ package groupIron
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"log"
 	"math"
@@ -54,13 +55,6 @@ func GetAllPlayersCurrentStatus(client *ApiClient) *[]Player {
 
 	allPlayers := mapAllPlayers(&allPlayersUnconverted)
 
-	jsonPlayers, err := json.Marshal(*allPlayers)
-	if err != nil {
-		fmt.Println("Error converting to JSON:", err)
-		return nil
-	}
-	fmt.Println(string(jsonPlayers))
-
 	return allPlayers
 }
 
@@ -97,15 +91,18 @@ func mapPlayer(unmappedPlayer *PlayerUnconverted) map[string]Skill {
 	return playerSkills
 }
 
-func GetPlayerCurrentStats(players *[]Player, playerName string) {
-	player := new(Player)
+func GetPlayerCurrentStats(players *[]Player, playerName string) (*Player, error) {
 
+	fmt.Println("Player to find", playerName)
 	for _, p := range *players {
 		if p.Name == playerName {
-			player = &p
+			player := &p
 			fmt.Println(*player)
+			return player, nil
 		}
 	}
+
+	return nil, errors.New("Couldn't find player")
 }
 
 func applyProgressPercent(skill *Skill) {

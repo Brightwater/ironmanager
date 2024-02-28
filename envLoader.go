@@ -8,9 +8,9 @@ import (
 )
 
 type Config struct {
-	GROUP_IRON_BASE_URL string `env:"GROUP_IRON_BASE_URL"`
-	GROUP_IRON_TOKEN    string `env:"GROUP_IRON_TOKEN"`
-	Port                string `env:"PORT"`
+	GROUP_IRON_BASE_URL string
+	GROUP_IRON_TOKEN    string
+	PORT                string 
 }
 
 func LoadConfig() (*Config, error) {
@@ -24,6 +24,6 @@ func LoadConfig() (*Config, error) {
 	return &Config{
 		os.Getenv("GROUP_IRON_BASE_URL"),
 		os.Getenv("GROUP_IRON_TOKEN"),
-		os.Getenv("PORT"),
+		":" + os.Getenv("HTTP_PORT"),
 	}, nil
 }
