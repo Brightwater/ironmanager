@@ -17,7 +17,7 @@ func main() {
 		log.Fatal("Couldn't load config", err)
 	}
 
-	client := groupIron.NewApiClient(config.GROUP_IRON_BASE_URL+"/get-group-data?from_time=1980-12-23T03:57:02.960Z", config.GROUP_IRON_TOKEN)
+	client := groupIron.NewApiClient(config.GROUP_IRON_BASE_URL, config.GROUP_IRON_TOKEN)
 
 	players := groupIron.GetAllPlayersCurrentStatus(client)
 	if players == nil {

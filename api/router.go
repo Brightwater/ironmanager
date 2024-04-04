@@ -41,8 +41,33 @@ func SetupRoutes(client *groupIron.ApiClient) *chi.Mux {
 
 	r.Get("/skillsScreenshot/{member}", getIronManScreenShotForMember())
 	r.Get("/getIronData/{member}", getDataForIronMan(client))
+	r.Get("/getIronXpYear", getYearXpDataForIronMan(client))
+	r.Get("/graphScreenshot", getIronManYearXpGraph())
 
 	return r
+}
+
+func getIronManYearXpGraph() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+
+		buf, err := htmlgrabber.GrabGroupIronGraphPage()
+		if err != nil {
+			render.Status(r, http.StatusInternalServerError)
+			render.PlainText(w, r, "Something went wrong")
+			return
+		}
+
+		w.Header().Set("Content-Type", "image/png")
+		w.Header().Set("Content-Disposition", "inline; filename=elementScreenshot.png")
+
+		_, err = w.Write(*buf)
+		if err != nil {
+			render.Status(r, http.StatusInternalServerError)
+			render.PlainText(w, r, "Something went wrong")
+			return
+		}
+		// fmt.Fprintf(w, "Hello world")
+	}
 }
 
 func getIronManScreenShotForMember() http.HandlerFunc {
@@ -92,5 +117,19 @@ func getDataForIronMan(client *groupIron.ApiClient) http.HandlerFunc {
 		}
 
 		fmt.Fprintf(w, "%s", string(jsonPlayers))
+	}
+}
+
+func getYearXpDataForIronMan(client *groupIron.ApiClient) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		// name := chi.URLParam(r, "member")
+
+		xpOverTimeJson, err := client.GetXpAllTime()
+		if err != nil {
+			http.Error(w, "Failed to get players", http.StatusInternalServerError)
+			return
+		}
+
+		fmt.Fprintf(w, "%s", string(xpOverTimeJson))
 	}
 }
