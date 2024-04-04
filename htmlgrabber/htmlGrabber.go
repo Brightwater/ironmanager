@@ -21,7 +21,7 @@ func GrabGroupIronGraphPage() (*[]byte, error) {
 	// create context
 	ctx, cancel := chromedp.NewContext(
 		context.Background(),
-		chromedp.WithLogf(log.Printf),
+		chromedp.WithDebugf(log.Printf),
 	)
 	defer cancel()
 
@@ -34,7 +34,7 @@ func GrabGroupIronGraphPage() (*[]byte, error) {
 
 	// capture screenshot of an element
 	var buf []byte
-	err := chromedp.Run(ctx, elementScreenshot(path, &buf, 2, "#chart-container > div > canvas", "#chart-container"))
+	err := chromedp.Run(ctx, elementScreenshot(path, &buf, 1, "#chart-container > div > canvas", "#chart-container"))
 	if err != nil {
 		fmt.Println("ERROR", err)
 		return nil, err
