@@ -38,7 +38,7 @@ func SetupRoutes(client *groupIron.ApiClient) *chi.Mux {
 	r.Handle("/_app/*", http.FileServer(http.Dir("static")))
 	r.Handle("/ui/*", http.FileServer(http.Dir("static")))
 	r.Handle("/fonts/*", http.FileServer(http.Dir("static")))
- 
+
 	r.Get("/skillsScreenshot/{member}", getIronManScreenShotForMember())
 	r.Get("/getIronData/{member}", getDataForIronMan(client))
 	r.Get("/getIronXpYear", getYearXpDataForIronMan(client))
